@@ -60,6 +60,5 @@ inline quadbit_node_t *quadbit_insert_search_set(quadbit_t * quadbit,
 						 quadbit_node_t * node,
 						 uint8_t pos);
 
-
 #include"quadbit.h"
 #endif
