@@ -22,14 +22,6 @@ struct quadbit_node_t {
 
 typedef struct quadbit_node_t quadbit_node_t;
 
-//intrusive data structure
-struct quadbit_item_t {
-	uint64_t x;
-	uint64_t y;
-// here you put your data and then cast your data Structure as quabit_item_t
-
-};
-
 typedef struct quadbit_item_t quadbit_item_t;
 
 struct quadbit_t {
@@ -55,10 +47,11 @@ uint8_t bit_diff_pos(uint64_t a, uint64_t b);
 
 quadbit_node_t *quadbit_new_node(quadbit_t * quadbit);
 
+#include"quadbit.h"
+
 inline quadbit_node_t *quadbit_insert_search_set(quadbit_t * quadbit,
 						 quadbit_item_t * item,
 						 quadbit_node_t * node,
 						 uint8_t pos);
 
-#include"quadbit.h"
 #endif

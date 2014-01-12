@@ -9,6 +9,13 @@
 //Assumptions : quadbits are memory efficient
 //            : they are fast at searching subsets
 
+//intrusive data structure
+struct quadbit_item_t {
+	uint64_t x;
+	uint64_t y;
+// here you put your data and then cast your data Structure as quabit_item_t
+};
+
 void quadbit_init(quadbit_t ** quadbit);
 
 void quadbit_insert(quadbit_t * quadbit, quadbit_item_t * item);
