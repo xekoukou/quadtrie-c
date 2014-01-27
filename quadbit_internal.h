@@ -12,7 +12,7 @@
 
 struct quadbit_node_t {
 
-	uint8_t pos;
+	int8_t pos;
 	uint8_t which;		//used for many things:
 // first bit shows whether the different bit is in the x(0) or y(1) position
 //the second and third show whether the child[1],child[0] are nodes or items  
@@ -43,7 +43,7 @@ typedef struct quadbit_iter_t quadbit_iter_t;
 
 inline void quadbit_new_bucket(quadbit_t * quadbit);
 
-uint8_t bit_diff_pos(uint64_t a, uint64_t b);
+uint8_t bit_diff_pos(int64_t a, int64_t b);
 
 quadbit_node_t *quadbit_new_node(quadbit_t * quadbit);
 
@@ -52,6 +52,6 @@ quadbit_node_t *quadbit_new_node(quadbit_t * quadbit);
 inline quadbit_node_t *quadbit_insert_search_set(quadbit_t * quadbit,
 						 quadbit_item_t * item,
 						 quadbit_node_t * node,
-						 uint8_t pos);
+						 int8_t pos);
 
 #endif

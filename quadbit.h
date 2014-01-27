@@ -11,8 +11,8 @@
 
 //intrusive data structure
 struct quadbit_item_t {
-	uint64_t x;
-	uint64_t y;
+	int64_t x;
+	int64_t y;
 // here you put your data and then cast your data Structure as quabit_item_t
 };
 
@@ -28,7 +28,7 @@ quadbit_item_t *quadbit_search(quadbit_t * quadbit, quadbit_item_t * item);
 // pos is from 0 bit to 63bit
 
 quadbit_item_t *quadbit_search_set(quadbit_t * quadbit, quadbit_item_t * item,
-				   quadbit_node_t ** parent, uint8_t pos);
+				   quadbit_node_t ** parent, int8_t pos);
 
 //TODO memory from the removed node is not freed. It becomes unusuable
 ////returns the removed quadbit_item

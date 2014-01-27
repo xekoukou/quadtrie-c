@@ -8,10 +8,10 @@ inline void quadbit_new_bucket(quadbit_t * quadbit)
 	quadbit->bucket_pos = 0;
 }
 
-uint8_t bit_diff_pos(uint64_t a, uint64_t b)
+uint8_t bit_diff_pos(int64_t a, int64_t b)
 {
 
-	uint64_t c = a ^ b;
+	int64_t c = a ^ b;
 	uint8_t result = 0;
 	while (c) {
 		c = c >> 1;
@@ -63,7 +63,7 @@ void quadbit_insert(quadbit_t * quadbit, quadbit_item_t * item)
 			node->pos = posX;
 			node->which = 64 + 32;
 
-			uint64_t mask = 0x8000000000000000 >> posX;
+			int64_t mask = 0x8000000000000000 >> posX;
 
 			if (item->x & mask) {
 
@@ -80,7 +80,7 @@ void quadbit_insert(quadbit_t * quadbit, quadbit_item_t * item)
 			node->pos = posY;
 			node->which = 128 + 64 + 32;
 
-			uint64_t mask = 0x8000000000000000 >> posY;
+			int64_t mask = 0x8000000000000000 >> posY;
 
 			if (item->y & mask) {
 
@@ -143,7 +143,7 @@ void quadbit_insert(quadbit_t * quadbit, quadbit_item_t * item)
 				if (posX < posY) {
 					node->pos = posX;
 
-					uint64_t mask =
+					int64_t mask =
 					    0x8000000000000000 >> posX;
 
 					if (item->x & mask) {
@@ -170,7 +170,7 @@ void quadbit_insert(quadbit_t * quadbit, quadbit_item_t * item)
 
 				} else {
 					node->pos = posY;
-					uint64_t mask =
+					int64_t mask =
 					    0x8000000000000000 >> posY;
 
 					if (item->y & mask) {
@@ -206,7 +206,7 @@ void quadbit_insert(quadbit_t * quadbit, quadbit_item_t * item)
 					node->pos = posX;
 					node->which = 64 + 32;
 
-					uint64_t mask =
+					int64_t mask =
 					    0x8000000000000000 >> posX;
 
 					if (item->x & mask) {
@@ -228,7 +228,7 @@ void quadbit_insert(quadbit_t * quadbit, quadbit_item_t * item)
 					node->pos = posY;
 					node->which = 128 + 64 + 32;
 
-					uint64_t mask =
+					int64_t mask =
 					    0x8000000000000000 >> posY;
 
 					if (item->y & mask) {
@@ -328,7 +328,7 @@ quadbit_item_t *quadbit_search(quadbit_t * quadbit, quadbit_item_t * item)
 // In that case parent is NULL.
 
 quadbit_item_t *quadbit_search_set(quadbit_t * quadbit, quadbit_item_t * item,
-				   quadbit_node_t ** parent, uint8_t pos)
+				   quadbit_node_t ** parent, int8_t pos)
 {
 	*parent = NULL;
 
@@ -417,7 +417,7 @@ quadbit_item_t *quadbit_search_set(quadbit_t * quadbit, quadbit_item_t * item,
 inline quadbit_node_t *quadbit_insert_search_set(quadbit_t * quadbit,
 						 quadbit_item_t * item,
 						 quadbit_node_t * node,
-						 uint8_t pos)
+						 int8_t pos)
 {
 
 	//we already know that there is a node and that there is an item that is part of of the set
