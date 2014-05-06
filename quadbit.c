@@ -573,8 +573,9 @@ void *quadbit_remove(quadbit_t * quadbit, quadbit_item_t * item)
 					is_item = 0;
 				}
 
-				uint8_t cmask = 32 * ((!gwhich) + 1);
-				gpp->which = gpp->which + (cmask * is_item);
+				uint8_t cmask = 32 * (gwhich + 1);
+				gpp->which =
+				    (gpp->which & (~cmask)) + (cmask * is_item);
 
 				return c;
 			} else {
