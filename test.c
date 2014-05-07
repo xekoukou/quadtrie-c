@@ -81,4 +81,7 @@ void main()
 
 	}
 
+	int64_t number = 256;
+	print_int64_in_binary(number);
+
 }

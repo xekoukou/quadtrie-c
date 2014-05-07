@@ -3,6 +3,7 @@
 
 #include<stdint.h>
 #include<stdlib.h>
+#include<stdio.h>
 
 #include"quadbit_internal.h"
 
@@ -27,7 +28,8 @@ quadbit_item_t *quadbit_search(quadbit_t * quadbit, quadbit_item_t * item);
 // In that case parent is NULL.
 // pos is from 0 bit to 63bit
 
-quadbit_item_t *quadbit_search_set(quadbit_t * quadbit, quadbit_item_t * item,
+quadbit_item_t *quadbit_search_set(quadbit_t * quadbit,
+				   quadbit_item_t * item,
 				   quadbit_node_t ** parent, int8_t pos);
 
 //TODO memory from the removed node is not freed. It becomes unusuable
@@ -39,5 +41,12 @@ quadbit_item_t *quadbit_iter_first(quadbit_iter_t * iter,
 				   quadbit_node_t * parent);
 				   //Indicates the end by sending NULL
 quadbit_item_t *quadbit_iter_next(quadbit_iter_t * iter);
+
+void print_int64_in_binary(int64_t numb);
+
+void quadbit_print(quadbit_t * quadbit);
+
+void print_item(quadbit_item_t * item);
+void print_node(quadbit_node_t * node);
 
 #endif

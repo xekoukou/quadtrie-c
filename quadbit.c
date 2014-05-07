@@ -150,8 +150,7 @@ void quadbit_insert(quadbit_t * quadbit, quadbit_item_t * item)
 
 						node->which = 64;
 
-						node->child[1]
-						    = item;
+						node->child[1] = item;
 						node->child[0]
 						    =
 						    quadbit_insert_search_set
@@ -159,8 +158,7 @@ void quadbit_insert(quadbit_t * quadbit, quadbit_item_t * item)
 
 					} else {
 						node->which = 32;
-						node->child[0]
-						    = item;
+						node->child[0] = item;
 						node->child[1]
 						    =
 						    quadbit_insert_search_set
@@ -176,8 +174,7 @@ void quadbit_insert(quadbit_t * quadbit, quadbit_item_t * item)
 					if (item->y & mask) {
 						node->which = 128 + 64;
 
-						node->child[1]
-						    = item;
+						node->child[1] = item;
 						node->child[0]
 						    =
 						    quadbit_insert_search_set
@@ -185,8 +182,7 @@ void quadbit_insert(quadbit_t * quadbit, quadbit_item_t * item)
 
 					} else {
 						node->which = 128 + 32;
-						node->child[0]
-						    = item;
+						node->child[0] = item;
 						node->child[1]
 						    =
 						    quadbit_insert_search_set
@@ -195,7 +191,7 @@ void quadbit_insert(quadbit_t * quadbit, quadbit_item_t * item)
 					}
 				}
 
-				break;
+				return;
 
 			} else {
 
@@ -211,16 +207,12 @@ void quadbit_insert(quadbit_t * quadbit, quadbit_item_t * item)
 
 					if (item->x & mask) {
 
-						node->child[1]
-						    = item;
-						node->child[0]
-						    = c;
+						node->child[1] = item;
+						node->child[0] = c;
 
 					} else {
-						node->child[0]
-						    = item;
-						node->child[1]
-						    = c;
+						node->child[0] = item;
+						node->child[1] = c;
 
 					}
 
@@ -233,25 +225,20 @@ void quadbit_insert(quadbit_t * quadbit, quadbit_item_t * item)
 
 					if (item->y & mask) {
 
-						node->child[1]
-						    = item;
-						node->child[0]
-						    = c;
+						node->child[1] = item;
+						node->child[0] = c;
 
 					} else {
-						node->child[0]
-						    = item;
-						node->child[1]
-						    = c;
+						node->child[0] = item;
+						node->child[1] = c;
 
 					}
 
 				}
-
 				p->child[which] = node;
 				//tell the parent that it has a node not an item
 				p->which = p->which & (~(32 * (which + 1)));
-				break;
+				return;
 			}
 		}
 
@@ -424,7 +411,6 @@ inline quadbit_node_t *quadbit_insert_search_set(quadbit_t * quadbit,
 
 	quadbit_node_t *p = quadbit->root;
 	quadbit_node_t *c;
-	uint8_t is_item;
 	uint8_t which;
 
 	if (p->pos >= pos) {
@@ -451,12 +437,13 @@ inline quadbit_node_t *quadbit_insert_search_set(quadbit_t * quadbit,
 
 		//we will never reach an item.
 
-		if ((c)->pos >= pos) {
+		if (c->pos > pos) {
 			p->child[which] = node;
+
 			return c;
 
 		}
-		p = (quadbit_node_t *) c;
+		p = c;
 
 	}
 }
@@ -491,9 +478,10 @@ void *quadbit_remove(quadbit_t * quadbit, quadbit_item_t * item)
 	uint8_t is_item;
 	uint8_t which;
 
-	//granpa is quadbit?
 	quadbit_node_t *gpp;
 	uint8_t gwhich;
+
+	//granpa is quadbit,pa is root
 
 	if (p->which & 128) {
 		if (item->y & (0x8000000000000000 >> p->pos)) {
@@ -526,7 +514,11 @@ void *quadbit_remove(quadbit_t * quadbit, quadbit_item_t * item)
 		uint8_t posY = bit_diff_pos(c->y, item->y);
 
 		if (((posX == 64) && (posY == 64))) {
-			quadbit->is_root_item = 1;
+			if (p->which & (32 * (!which + 1))) {
+				quadbit->is_root_item = 1;
+			} else {
+				quadbit->is_root_item = 0;
+			}
 			quadbit->root = p->child[!which];
 			return c;
 		} else {
@@ -636,6 +628,135 @@ quadbit_item_t *quadbit_iter_next(quadbit_iter_t * iter)
 			iter->flip[i + 1] = 0;
 			i++;
 		}
+
+	}
+
+}
+
+void print_int64_in_binary(int64_t numb)
+{
+
+	int i;
+	int64_t one = 1;
+	int first_non_zero = 0;
+	for (i = 63; i >= 0; i--) {
+		if ((one << i) & numb) {
+			printf("1");
+			first_non_zero = 1;
+		} else {
+			if (first_non_zero) {
+				printf("0");
+			}
+		}
+
+	}
+
+}
+
+void print_item(quadbit_item_t * item)
+{
+	printf("item:0x%x ", item);
+	printf("x: ");
+	print_int64_in_binary(item->x);
+	printf(" y: ");
+	print_int64_in_binary(item->y);
+
+	printf("\n");
+}
+
+void print_node(quadbit_node_t * node)
+{
+
+	printf("node:0x%x ", node);
+	if (node->which & 128) {
+		printf("y coordinate comparison ");
+	} else {
+		printf("x coordinate comparison ");
+	}
+
+	printf("bit position:%d ", 63 - node->pos);
+
+	if (node->which & 32) {
+		printf("0 child is item:0x%x ", node->child[0]);
+	} else {
+		printf("0 child is node:0x%x ", node->child[0]);
+	}
+	if (node->which & 64) {
+		printf("1 child is item:0x%x ", node->child[1]);
+	} else {
+		printf("1 child is node:0x%x ", node->child[1]);
+	}
+
+	printf("\n");
+
+}
+
+void quadbit_print(quadbit_t * quadbit)
+{
+
+	if (quadbit->root == NULL) {
+		return;
+	}
+
+	if (quadbit->is_root_item) {
+		print_item(quadbit->root);
+	} else {
+
+		quadbit_iter_t iiter;
+		quadbit_iter_t *iter = &iiter;
+
+		iter->i[0] = quadbit->root;
+		iter->level = 0;
+		iter->flip[0] = 0;
+
+		uint8_t i = 0;
+		while (1) {
+			print_node(iter->i[i]);
+			if (iter->i[i]->which & (32 * (iter->flip[i] + 1))) {
+				iter->level = i;
+				print_item(iter->i[i]->child[iter->flip[i]]);
+				break;
+			} else {
+				iter->i[i + 1] =
+				    iter->i[i]->child[iter->flip[i]];
+				iter->flip[i + 1] = 0;
+				i++;
+			}
+
+		}
+
+ start:	while (1) {
+			while (iter->flip[iter->level] == 1) {
+
+				if (iter->level == 0) {
+					goto end;
+				}
+
+				iter->level--;
+			}
+
+			iter->flip[iter->level] = 1;
+
+			uint8_t i = iter->level;
+			while (1) {
+
+				if (iter->i[i]->
+				    which & (32 * (iter->flip[i] + 1))) {
+					iter->level = i;
+					print_item(iter->
+						   i[i]->child[iter->flip[i]]);
+					goto start;
+				} else {
+					iter->i[i + 1] =
+					    iter->i[i]->child[iter->flip[i]];
+					iter->flip[i + 1] = 0;
+					i++;
+					print_node(iter->i[i]);
+				}
+
+			}
+		}
+ end:		;
 
 	}
 
