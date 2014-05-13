@@ -344,11 +344,11 @@ quadbit_item_t *quadbit_search_set(quadbit_t * quadbit, quadbit_item_t * item,
 	uint8_t is_item;
 	uint8_t which;
 
-	uint8_t once = 1;
+	uint8_t once = 0;
 	// needs to check at least one item so as to make sure this is the correnct set
 	if (p->pos > pos) {
 		*parent = quadbit->root;
-		once = 0;
+		once = 1;
 		//TODO find the first item on the bottom
 	}
 	while (1) {
@@ -375,9 +375,9 @@ quadbit_item_t *quadbit_search_set(quadbit_t * quadbit, quadbit_item_t * item,
 		if (!is_item) {
 			p = (quadbit_node_t *) c;
 
-			if (once && (((quadbit_node_t *) p)->pos > pos)) {
+			if (!once && (((quadbit_node_t *) p)->pos > pos)) {
 				*parent = p;
-				once = 0;
+				once = 1;
 			}
 
 		} else {
