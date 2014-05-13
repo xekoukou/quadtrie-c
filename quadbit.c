@@ -392,6 +392,7 @@ quadbit_item_t *quadbit_search_set(quadbit_t * quadbit, quadbit_item_t * item,
 					return c;
 				}
 			} else {
+				*parent = NULL;
 				return NULL;
 			}
 
@@ -740,11 +741,11 @@ void quadbit_print(quadbit_t * quadbit)
 			uint8_t i = iter->level;
 			while (1) {
 
-				if (iter->i[i]->
-				    which & (32 * (iter->flip[i] + 1))) {
+				if (iter->
+				    i[i]->which & (32 * (iter->flip[i] + 1))) {
 					iter->level = i;
-					print_item(iter->
-						   i[i]->child[iter->flip[i]]);
+					print_item(iter->i[i]->
+						   child[iter->flip[i]]);
 					goto start;
 				} else {
 					iter->i[i + 1] =
